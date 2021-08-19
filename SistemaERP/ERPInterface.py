@@ -5,11 +5,50 @@ import pymysql
 
 # Cria janela de Administrador
 class AdminWindow():
+
+    def CadastrarProduto(self):
+        self.cadastrar = Tk()
+        self.cadastrar.title('Cadastro de Produtos')
+        self.cadastrar['bg'] = '#524f4f'
+
+        # Nomes dos Campos
+        Label(self.cadastrar, text='Cadastre os produtos', bg='#524f4f', fg='white').grid(row=0, column=0, columnspan=4,
+                                                                                          padx=5, pady=5)
+        Label(self.cadastrar, text='Nome', bg='#524f4f', fg='white').grid(row=1, column=0, columnspan=1, padx=5, pady=5)
+        Label(self.cadastrar, text='Ingredientes', bg='#524f4f', fg='white').grid(row=2, column=0, columnspan=1, padx=5,
+                                                                                  pady=5)
+        Label(self.cadastrar, text='Grupo', bg='#524f4f', fg='white').grid(row=3, column=0, columnspan=1, padx=5, pady=5)
+        Label(self.cadastrar, text='Preço', bg='#524f4f', fg='white').grid(row=4, column=0, columnspan=1, padx=5, pady=5)
+
+        # Campo para entrar com o nome do produto
+        self.nome = Entry(self.cadastrar)
+        self.nome.grid(row=1, column=1, columnspan=2, padx=5, pady=5)
+
+        # Campo para entrar com os ingredientes do produto
+        self.ingrediente = Entry(self.cadastrar)
+        self.ingrediente.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
+
+        # Campo para entrar com o grupo do produto
+        self.grupo = Entry(self.cadastrar)
+        self.grupo.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
+
+        # Campo para entrar com o preço do produto
+        self.preco = Entry(self.cadastrar)
+        self.preco.grid(row=4, column=1, columnspan=2, padx=5, pady=5)
+
+        
+
+        self.cadastrar.mainloop()
+
     def __init__(self):
         self.root = Tk()
         self.root.title('ADMINISTRADOR')
         self.root.geometry('500x500')
 
+        Button(self.root, text='Pedidos', width=20, bg='gray').grid(row=0, column=0, padx=10, pady=5)
+        Button(self.root, text='Cadastros', width=20, bg='gray', command=self.CadastrarProduto).grid(row=1, column=0, padx=10, pady=5)
+
+        # Mantém a janela aberta
         self.root.mainloop()
 
 #----------------------------------------------------------------------------------------------------------------------
