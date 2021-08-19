@@ -11,35 +11,64 @@ class AdminWindow():
         self.cadastrar.title('Cadastro de Produtos')
         self.cadastrar['bg'] = '#524f4f'
 
-        # Nomes dos Campos
-        Label(self.cadastrar, text='Cadastre os produtos', bg='#524f4f', fg='white').grid(row=0, column=0, columnspan=4,
-                                                                                          padx=5, pady=5)
-        Label(self.cadastrar, text='Nome', bg='#524f4f', fg='white').grid(row=1, column=0, columnspan=1, padx=5, pady=5)
-        Label(self.cadastrar, text='Ingredientes', bg='#524f4f', fg='white').grid(row=2, column=0, columnspan=1, padx=5,
-                                                                                  pady=5)
-        Label(self.cadastrar, text='Grupo', bg='#524f4f', fg='white').grid(row=3, column=0, columnspan=1, padx=5, pady=5)
-        Label(self.cadastrar, text='Preço', bg='#524f4f', fg='white').grid(row=4, column=0, columnspan=1, padx=5, pady=5)
+        # Labels/Nomes e Campos para entrar com o nome do produto
+        Label(self.cadastrar, text='Cadastre o produto', bg='#524f4f', fg='white').grid(row=0, column=0, columnspan=4, padx=5, pady=5)
 
-        # Campo para entrar com o nome do produto
+        Label(self.cadastrar, text='Nome', bg='#524f4f', fg='white').grid(row=1, column=0, columnspan=1, padx=5, pady=5)
         self.nome = Entry(self.cadastrar)
         self.nome.grid(row=1, column=1, columnspan=2, padx=5, pady=5)
 
-        # Campo para entrar com os ingredientes do produto
+        Label(self.cadastrar, text='Ingredientes', bg='#524f4f', fg='white').grid(row=2, column=0, columnspan=1, padx=5, pady=5)
         self.ingrediente = Entry(self.cadastrar)
         self.ingrediente.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
 
-        # Campo para entrar com o grupo do produto
+        Label(self.cadastrar, text='Grupo', bg='#524f4f', fg='white').grid(row=3, column=0, columnspan=1, padx=5, pady=5)
         self.grupo = Entry(self.cadastrar)
         self.grupo.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
 
-        # Campo para entrar com o preço do produto
+        Label(self.cadastrar, text='Preço', bg='#524f4f', fg='white').grid(row=4, column=0, columnspan=1, padx=5, pady=5)
         self.preco = Entry(self.cadastrar)
         self.preco.grid(row=4, column=1, columnspan=2, padx=5, pady=5)
 
-        
+        # Definição de Botões
+        # O parametro 'relief=' altera o formato/tipo da borda do botão
+        btnCadastrar = Button(self.cadastrar, text='Cadastrar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnCadastrar.grid(row=5, column=0, padx=10, pady=5)
+
+        # ----------------------------
+        btnExcluir = Button(self.cadastrar, text='Excluir', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnExcluir.grid(row=5, column=1, padx=10, pady=5)
+
+        # ----------------------------
+        btnAtualizar = Button(self.cadastrar, text='Atualizar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnAtualizar.grid(row=6, column=0, padx=10, pady=5)
+
+        # ----------------------------
+        btnLimpar = Button(self.cadastrar, text='Limpar Produtosr', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnLimpar.grid(row=6, column=1, padx=10, pady=5)
+
+        # Bloco da Treeview/campo para visualização, apresentação dos produtos cadastrados
+        self.tree = ttk.Treeview(self.cadastrar, select="browse", column=("column1", "column2", "column3", "column4"),
+                                 show='headings')
+        self.tree.column("column1", width=200, minwidth=500, stretch=NO)
+        self.tree.heading('#1', text='Nome')
+
+        self.tree.column("column2", width=400, minwidth=500, stretch=NO)
+        self.tree.heading('#2', text='Ingredientes')
+
+        self.tree.column("column3", width=100, minwidth=500, stretch=NO)
+        self.tree.heading('#3', text='Grupo')
+
+        self.tree.column("column4", width=60, minwidth=500, stretch=NO)
+        self.tree.heading('#4', text='Preço')
+
+        # Os parametros 'rowspan=' e 'columnspan=' define o número de linhas e colunas que o campo/Treeview ocupará
+        self.tree.grid(row=0, column=4, padx=10, pady=10, columnspan=3, rowspan=8)
 
         self.cadastrar.mainloop()
 
+    #-----------------------------------
+    # Método construtor da janela de administrdor
     def __init__(self):
         self.root = Tk()
         self.root.title('ADMINISTRADOR')
