@@ -32,7 +32,7 @@ class AdminWindow():
 
         # Definição de Botões
         # O parametro 'relief=' altera o formato/tipo da borda do botão
-        btnCadastrar = Button(self.cadastrar, text='Cadastrar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnCadastrar = Button(self.cadastrar, text='Cadastrar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.CadastrarProdutosBackEnd)
         btnCadastrar.grid(row=5, column=0, padx=10, pady=5)
 
         # ----------------------------
@@ -65,6 +65,8 @@ class AdminWindow():
         # Os parametros 'rowspan=' e 'columnspan=' define o número de linhas e colunas que o campo/Treeview ocupará
         self.tree.grid(row=0, column=4, padx=10, pady=10, columnspan=3, rowspan=8)
 
+        self.mostrarProdutosBackEnd()
+
         self.cadastrar.mainloop()
 
     #-----------------------------------
@@ -79,6 +81,75 @@ class AdminWindow():
 
         # Mantém a janela aberta
         self.root.mainloop()
+
+    def mostrarProdutosBackEnd(self):
+        try:
+            conexao = pymysql.connect(
+                host='localhost',
+                user='root',
+                password='',
+                db='erp',
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+        except:
+            # Colocar este print em MessageBox, ao compilar em '.EXE'
+            print('Erro ao conectar ao Banco de Dados ERP')
+
+        try:
+            with conexao.cursor() as cursor:
+                cursor.execute('select * from produtos')
+                resultados = cursor.fetchall()
+        except:
+            print('Erro na consulta')
+
+        #Deleta,todo que estiver na Treeview para preencer com novos dados
+        self.tree.delete(*self.tree.get_children())
+
+        # Lista que receberá os produtos
+        linhaV = []
+
+        # Laço para adicionar os produtos à variável linhaV
+        for linha in resultados:
+            linhaV.append(linha['nome'])
+            linhaV.append(linha['ingredientes'])
+            linhaV.append(linha['grupo'])
+            linhaV.append(linha['preco'])
+
+            # O parametro 'iid=' identifica o registro utilizando o campo especificado neste parametro
+            self.tree.insert("", END, values=linhaV, iid=linha['id'], tag='1')
+
+            linhaV.clear()
+
+    def CadastrarProdutosBackEnd(self):
+        # Pegar as variáveis declaradas na função 'CadastrarProduto' com o 'Entry()'
+        nome = self.nome.get()
+        ingredientes = self.ingrediente.get()
+        grupo = self.grupo.get()
+        preco = self.preco.get()
+
+        # Faz a conexão com o DB
+        try:
+            conexao = pymysql.connect(
+                host='localhost',
+                user='root',
+                password='',
+                db='erp',
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+        except:
+            # Colocar este print em MessageBox, ao compilar em '.EXE'
+            print('Erro ao conectar ao Banco de Dados ERP')
+
+        try:
+            with conexao.cursor() as cursor:
+                cursor.execute('insert into produtos(nome, ingredientes, grupo, preco) values (%s, %s, %s, %s)',(nome, ingredientes, grupo, preco))
+                conexao.commit()
+        except:
+            print('Erro ao cadastrar produto')
+
+        self.mostrarProdutosBackEnd()
 
 #----------------------------------------------------------------------------------------------------------------------
 
@@ -169,7 +240,7 @@ class LoginWindow():
 
                     try:
                         with conexao.cursor() as cursor:
-                            cursor.execute('insert into cadastro values (%s, %s, %s)',(nome, senha, 1))
+                            cursor.execute('insert into cadastro(nome, senha, nivel) values (%s, %s, %s)',(nome, senha, 1))
                             conexao.commit()
                         messagebox.showinfo('Cadastro', 'Usuário cadastrado com sucesso.')
                         # Destroio a janela de cadastro/login para que o usuário entre com os novos dados cadastrados
@@ -297,8 +368,6 @@ class LoginWindow():
         botaoViewCadastro = Button(self.root, text='Visualizar Cadastros', bg='White', height=1, width=18,
                                    command=self.VisualizarCadastros)
         botaoViewCadastro.grid(row=6, column=0, columnspan=2, padx=5, pady=8)
-
-
 
         self.root.mainloop()
 
