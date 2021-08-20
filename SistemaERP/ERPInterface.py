@@ -5,6 +5,13 @@ import pymysql
 
 # Cria janela de Administrador
 class AdminWindow():
+    def RegistrarPedido(self):
+        self.pedido = Tk()
+        self.pedido.title('Registrar Pedido')
+        self.pedido['bg'] = '#524f4f'
+
+
+        self.pedido.mainloop()
 
     def CadastrarProduto(self):
         self.cadastrar = Tk()
@@ -70,13 +77,13 @@ class AdminWindow():
         self.cadastrar.mainloop()
 
     #-----------------------------------
-    # Método construtor da janela de administrdor
+    # Método construtor da janela de administrador
     def __init__(self):
         self.root = Tk()
         self.root.title('ADMINISTRADOR')
         self.root.geometry('500x500')
 
-        Button(self.root, text='Pedidos', width=20, bg='gray').grid(row=0, column=0, padx=10, pady=5)
+        Button(self.root, text='Pedidos', width=20, bg='gray', command=self.RegistrarPedido).grid(row=0, column=0, padx=10, pady=5)
         Button(self.root, text='Cadastros', width=20, bg='gray', command=self.CadastrarProduto).grid(row=1, column=0, padx=10, pady=5)
 
         # Mantém a janela aberta
@@ -181,7 +188,7 @@ class AdminWindow():
 
     # Deleta todos os dados do BD, perigoso utilizar
     def LimpaCadastrosDB(self):
-        if messagebox.askokcancel('Limpar dados: CUIDADO!!', 'Deseja limpar o Banco de Dados? Não há volta sem o backup'):
+        if messagebox.askokcancel('Limpar dados: CUIDADO!!', 'Deseja limpar o Banco de Dados?\nNão há volta sem o backup!!!'):
             try:
                 conexao = pymysql.connect(
                     host='localhost',
@@ -207,7 +214,7 @@ class AdminWindow():
 
 #----------------------------------------------------------------------------------------------------------------------
 
-# Função para Logar no sistema
+# Função para Logar ou Cadastrar usuário no sistema
 class LoginWindow():
 
     # Cria conexão com DB e verifica se o login foi efetuado...
