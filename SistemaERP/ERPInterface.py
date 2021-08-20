@@ -36,15 +36,15 @@ class AdminWindow():
         btnCadastrar.grid(row=5, column=0, padx=10, pady=5)
 
         # ----------------------------
-        btnExcluir = Button(self.cadastrar, text='Excluir', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnExcluir = Button(self.cadastrar, text='Excluir', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.ExcluirProdutoBackEnd)
         btnExcluir.grid(row=5, column=1, padx=10, pady=5)
 
         # ----------------------------
-        btnAtualizar = Button(self.cadastrar, text='Atualizar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnAtualizar = Button(self.cadastrar, text='Atualizar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.CadastrarProdutosBackEnd)
         btnAtualizar.grid(row=6, column=0, padx=10, pady=5)
 
         # ----------------------------
-        btnLimpar = Button(self.cadastrar, text='Limpar Produtosr', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnLimpar = Button(self.cadastrar, text='Limpar Produtosr', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.LimpaCadastrosDB)
         btnLimpar.grid(row=6, column=1, padx=10, pady=5)
 
         # Bloco da Treeview/campo para visualização, apresentação dos produtos cadastrados
@@ -150,6 +150,60 @@ class AdminWindow():
             print('Erro ao cadastrar produto')
 
         self.mostrarProdutosBackEnd()
+
+    def ExcluirProdutoBackEnd(self):
+        # A variável 'idDeletar' receberá o id do elemento/produto selecionado na Treeview
+        idDeletar = int(self.tree.selection()[0])
+
+        try:
+            conexao = pymysql.connect(
+                host='localhost',
+                user='root',
+                password='',
+                db='erp',
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+        except:
+            # Colocar este print em MessageBox, ao compilar em '.EXE'
+            print('Erro ao conectar ao Banco de Dados ERP')
+
+        # Deleta o registro selecionada na Treeview usando o id como referencia
+        try:
+            with conexao.cursor() as cursor:
+                cursor.execute('delete from produtos where id = {}'.format(idDeletar))
+                conexao.commit()
+        except:
+            print('Erro na consulta')
+
+        # Atualiza a Treeview automáticamente, sem necessidade de clicar em atulizar
+        self.mostrarProdutosBackEnd()
+
+    # Deleta todos os dados do BD, perigoso utilizar
+    def LimpaCadastrosDB(self):
+        if messagebox.askokcancel('Limpar dados: CUIDADO!!', 'Deseja limpar o Banco de Dados? Não há volta sem o backup'):
+            try:
+                conexao = pymysql.connect(
+                    host='localhost',
+                    user='root',
+                    password='',
+                    db='erp',
+                    charset='utf8mb4',
+                    cursorclass=pymysql.cursors.DictCursor
+                )
+            except:
+                # Colocar este print em MessageBox, ao compilar em '.EXE'
+                print('Erro ao conectar ao Banco de Dados ERP')
+
+            # Limpa todos os registros da tabela do DB, mas mantém a tabela
+            try:
+                with conexao.cursor() as cursor:
+                    cursor.execute('truncate table produtos;')
+                    conexao.commit()
+            except:
+                print('Erro na consulta')
+
+            self.mostrarProdutosBackEnd()
 
 #----------------------------------------------------------------------------------------------------------------------
 
