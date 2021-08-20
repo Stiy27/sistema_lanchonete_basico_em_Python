@@ -5,14 +5,78 @@ import pymysql
 
 # Cria janela de Administrador
 class AdminWindow():
-    def RegistrarPedido(self):
+
+    def RegistrarPedidoFrontEnd(self):
         self.pedido = Tk()
         self.pedido.title('Registrar Pedido')
         self.pedido['bg'] = '#524f4f'
 
+        # Labels/Nome do produto do pedido
+        Label(self.pedido, text='Faça seu pedido', bg='#524f4f', fg='white').grid(row=0, column=0, columnspan=4,
+                                                                                        padx=5, pady=5)
+        Label(self.pedido, text='Nome', bg='#524f4f', fg='white').grid(row=1, column=0, columnspan=1, padx=5, pady=5)
+        self.produto = Entry(self.pedido)
+        self.produto.grid(row=1, column=1, columnspan=2, padx=5, pady=5)
+
+        Label(self.pedido, text='Endereço', bg='#524f4f', fg='white').grid(row=2, column=0, columnspan=1, padx=5, pady=5)
+        self.entrega = Entry(self.pedido)
+        self.entrega.grid(row=2, column=1, columnspan=2, padx=5, pady=5)
+
+        Label(self.pedido, text='Observações', bg='#524f4f', fg='white').grid(row=3, column=0, columnspan=1, padx=5, pady=5)
+        self.observacoes = Entry(self.pedido)
+        self.observacoes.grid(row=3, column=1, columnspan=2, padx=5, pady=5)
+
+        Label(self.pedido, text='Quantidade', bg='#524f4f', fg='white').grid(row=4, column=0, columnspan=1, padx=5,                                                                      pady=5)
+        self.quantidade = Entry(self.pedido)
+        self.quantidade.grid(row=4, column=1, columnspan=2, padx=5, pady=5)
+
+        Label(self.pedido, text='Valor Unitário', bg='#524f4f', fg='white').grid(row=5, column=0, columnspan=1, padx=5, pady=5)
+        self.valorunitario = Entry(self.pedido)
+        self.valorunitario.grid(row=5, column=1, columnspan=2, padx=5, pady=5)
+
+        # Definição de Botões
+        # O parametro 'relief=' altera o formato/tipo da borda do botão
+        btnRegistrarPedido = Button(self.pedido, text='Registrar Pedido', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.RegistrarPedidoBackEnd)
+        btnRegistrarPedido.grid(row=6, column=0, padx=10, pady=5)
+
+        btnExcluirPedido = Button(self.pedido, text='Excluir Pedido', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnExcluirPedido.grid(row=6, column=1, padx=10, pady=5)
+
+        btnFinalizarPedido = Button(self.pedido, text='Finalizar Pedido', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnFinalizarPedido.grid(row=7, column=0, padx=10, pady=5)
+
+        btnAlterarPedido = Button(self.pedido, text='Alterar Pedido', width=15, bg='gray', relief='flat', highlightbackground='#524f4f')
+        btnAlterarPedido.grid(row=7, column=1, padx=10, pady=5)
+
+        # Bloco da Treeview/campo para visualização, apresentação dos pedidos registrados
+        self.tree = ttk.Treeview(self.pedido, select="browse", column=("column1", "column2", "column3", "column4", "column5", "column6"), show='headings')
+
+        self.tree.column("column1", width=150, minwidth=500, stretch=NO)
+        self.tree.heading('#1', text='Nome')
+
+        self.tree.column("column2", width=300, minwidth=500, stretch=NO)
+        self.tree.heading('#2', text='Local de Entrega')
+
+        self.tree.column("column3", width=200, minwidth=500, stretch=NO)
+        self.tree.heading('#3', text='Observações')
+
+        self.tree.column("column4", width=80, minwidth=500, stretch=NO)
+        self.tree.heading('#4', text='Quantidade')
+
+        self.tree.column("column5", width=80, minwidth=500, stretch=NO)
+        self.tree.heading('#5', text='Valor Unitário')
+
+        self.tree.column("column6", width=75, minwidth=500, stretch=NO)
+        self.tree.heading('#6', text='Valor Total')
+
+        # Os parametros 'rowspan=' e 'columnspan=' define o número de linhas e colunas que o campo/Treeview ocupará
+        self.tree.grid(row=0, column=4, padx=10, pady=10, columnspan=3, rowspan=8)
+
+        self.MostrarPedidosBackEnd()
 
         self.pedido.mainloop()
 
+    # Janela: campos e botões de cadastro de produtos
     def CadastrarProduto(self):
         self.cadastrar = Tk()
         self.cadastrar.title('Cadastro de Produtos')
@@ -47,12 +111,8 @@ class AdminWindow():
         btnExcluir.grid(row=5, column=1, padx=10, pady=5)
 
         # ----------------------------
-        btnAtualizar = Button(self.cadastrar, text='Atualizar', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.CadastrarProdutosBackEnd)
-        btnAtualizar.grid(row=6, column=0, padx=10, pady=5)
-
-        # ----------------------------
         btnLimpar = Button(self.cadastrar, text='Limpar Produtosr', width=15, bg='gray', relief='flat', highlightbackground='#524f4f', command=self.LimpaCadastrosDB)
-        btnLimpar.grid(row=6, column=1, padx=10, pady=5)
+        btnLimpar.grid(row=6, column=0, columnspan=4, padx=10, pady=5)
 
         # Bloco da Treeview/campo para visualização, apresentação dos produtos cadastrados
         self.tree = ttk.Treeview(self.cadastrar, select="browse", column=("column1", "column2", "column3", "column4"),
@@ -77,13 +137,13 @@ class AdminWindow():
         self.cadastrar.mainloop()
 
     #-----------------------------------
-    # Método construtor da janela de administrador
+    # Método construtor da janela de administrador: Pedidos/Cadastros de Produtos
     def __init__(self):
         self.root = Tk()
         self.root.title('ADMINISTRADOR')
         self.root.geometry('500x500')
 
-        Button(self.root, text='Pedidos', width=20, bg='gray', command=self.RegistrarPedido).grid(row=0, column=0, padx=10, pady=5)
+        Button(self.root, text='Pedidos', width=20, bg='gray', command=self.RegistrarPedidoFrontEnd).grid(row=0, column=0, padx=10, pady=5)
         Button(self.root, text='Cadastros', width=20, bg='gray', command=self.CadastrarProduto).grid(row=1, column=0, padx=10, pady=5)
 
         # Mantém a janela aberta
@@ -128,6 +188,85 @@ class AdminWindow():
 
             linhaV.clear()
 
+    def MostrarPedidosBackEnd(self):
+        try:
+            conexao = pymysql.connect(
+                host='localhost',
+                user='root',
+                password='',
+                db='erp',
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+        except:
+            # Colocar este print em MessageBox, ao compilar em '.EXE'
+            print('Erro ao conectar ao Banco de Dados ERP')
+
+        try:
+            with conexao.cursor() as cursor:
+                cursor.execute('select * from pedidos')
+                resultados = cursor.fetchall()
+        except:
+            print('Erro na consulta')
+
+        # Deleta,todo que estiver na Treeview para preencer com novos dados
+        self.tree.delete(*self.tree.get_children())
+
+        listaPedidos = []
+
+        for linha in resultados:
+            listaPedidos.append(linha['nome'])
+            listaPedidos.append(linha['localEntrega'])
+            listaPedidos.append(linha['abservacoes'])
+            listaPedidos.append(linha['quantidade'])
+            listaPedidos.append(linha['valorUnitário'])
+            listaPedidos.append(linha['valorTotal'])
+
+            # O parametro 'iid=' identifica o registro utilizando o campo especificado neste parametro
+            self.tree.insert("", END, values=listaPedidos, iid=linha['id'], tag='1')
+
+            listaPedidos.clear()
+
+    def RegistrarPedidoBackEnd(self):
+        nome = self.produto.get().title()
+        localEntrega = self.entrega.get().title()
+        observacoes = self.observacoes.get()
+        quantidade = int(self.quantidade.get())
+        valorunitario = int(self.valorunitario.get())
+        valorTotal = valorunitario * quantidade
+
+        # Faz a conexão com o DB
+        try:
+            conexao = pymysql.connect(
+                host='localhost',
+                user='root',
+                password='',
+                db='erp',
+                charset='utf8mb4',
+                cursorclass=pymysql.cursors.DictCursor
+            )
+        except:
+            # Colocar este print em MessageBox, ao compilar em '.EXE'
+            print('Erro ao conectar ao Banco de Dados ERP')
+
+        try:
+            with conexao.cursor() as cursor:
+                cursor.execute('insert into pedidos (nome, localEntrega, abservacoes, quantidade, valorUnitário, valorTotal) values (%s, %s, %s, %s, %s, %s);',
+                               (nome, localEntrega, observacoes, quantidade, valorunitario, valorTotal))
+                conexao.commit()
+        except:
+            print('Erro ao cadastrar produto')
+
+        # Atualiza a Treeview pedidos para mostrar o novo pedido registrado
+        self.MostrarPedidosBackEnd()
+
+        # Limpa os campos da janela de registro de pedidos.
+        self.produto.delete(0, END)
+        self.entrega.delete(0, END)
+        self.observacoes.delete(0, END)
+        self.quantidade.delete(0,END)
+        self.valorunitario.delete(0, END)
+
     def CadastrarProdutosBackEnd(self):
         # Pegar as variáveis declaradas na função 'CadastrarProduto' com o 'Entry()'
         nome = self.nome.get()
@@ -151,12 +290,22 @@ class AdminWindow():
 
         try:
             with conexao.cursor() as cursor:
-                cursor.execute('insert into produtos(nome, ingredientes, grupo, preco) values (%s, %s, %s, %s)',(nome, ingredientes, grupo, preco))
+                cursor.execute('insert into produtos(nome, ingredientes, grupo, preco) values (%s, %s, %s, %s);',
+                               (nome, ingredientes, grupo, preco))
                 conexao.commit()
         except:
             print('Erro ao cadastrar produto')
 
         self.mostrarProdutosBackEnd()
+
+        # Limpa os campos da janela de cadastro de produtoss.
+        self.nome.delete(0, END)
+        self.ingrediente.delete(0, END)
+        self.grupo.delete(0, END)
+        self.preco.delete(0, END)
+
+    def ExcluirPedidoBackEnd(self):
+        pass
 
     def ExcluirProdutoBackEnd(self):
         # A variável 'idDeletar' receberá o id do elemento/produto selecionado na Treeview
@@ -272,6 +421,10 @@ class LoginWindow():
             if usuarioMaster:
                 # Chama/Abre a janela de Administrdor após login efetuado com sucesso como Master.
                 AdminWindow()
+
+        # Limpa as campos da janela de login
+        self.login.delete(0, END)
+        self.password.delete(0, END)
 
 # ----------------------------------------------------------------------------------------------------------------------
     def CadastroBackEnd(self):
