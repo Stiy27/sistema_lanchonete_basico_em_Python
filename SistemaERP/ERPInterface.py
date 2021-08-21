@@ -11,6 +11,20 @@ class AdminWindow():
         self.pedido.title('Registrar Pedido')
         self.pedido['bg'] = '#524f4f'
 
+        # Área de Centralização da janela
+        window_height = 260  # Altura da janela
+        window_width = 1180  # Largura da Janela
+
+        screen_width = self.pedido.winfo_screenwidth()
+        screen_height = self.pedido.winfo_screenheight()
+
+        x_cordinate = int((screen_width / 2) - (window_width / 2))
+        y_cordinate = int((screen_height / 2) - (window_height / 2))
+
+        self.pedido.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+        # Fim da Área de Centralizaçào da Janela
+        # ---------------------------------------
+
         # Labels/Nome do produto do pedido
         Label(self.pedido, text='Faça seu pedido', bg='#524f4f', fg='white').grid(row=0, column=0, columnspan=4,
                                                                                         padx=5, pady=5)
@@ -82,6 +96,20 @@ class AdminWindow():
         self.cadastrar.title('Cadastro de Produtos')
         self.cadastrar['bg'] = '#524f4f'
 
+        # Área de Centralização da janela
+        window_height = 260  # Altura da janela
+        window_width = 1050  # Largura da Janela
+
+        screen_width = self.cadastrar.winfo_screenwidth()
+        screen_height = self.cadastrar.winfo_screenheight()
+
+        x_cordinate = int((screen_width / 2) - (window_width / 2))
+        y_cordinate = int((screen_height / 2) - (window_height / 2))
+
+        self.cadastrar.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+        # Fim da Área de Centralizaçào da Janela
+        # ---------------------------------------
+
         # Labels/Nomes e Campos para entrar com o nome do produto
         Label(self.cadastrar, text='Cadastre o produto', bg='#524f4f', fg='white').grid(row=0, column=0, columnspan=4, padx=5, pady=5)
 
@@ -141,7 +169,21 @@ class AdminWindow():
     def __init__(self):
         self.root = Tk()
         self.root.title('ADMINISTRADOR')
-        self.root.geometry('500x500')
+        #self.root.geometry('500x500')
+
+        # Área de Centralização da janela
+        window_height = 80  # Altura da janela
+        window_width = 170  # Largura da Janela
+
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        x_cordinate = int((screen_width / 2) - (window_width / 2))
+        y_cordinate = int((screen_height / 2) - (window_height / 2))
+
+        self.root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+        # Fim da Área de Centralizaçào da Janela
+        # ---------------------------------------
 
         Button(self.root, text='Pedidos', width=20, bg='gray', command=self.RegistrarPedidoFrontEnd).grid(row=0, column=0, padx=10, pady=5)
         Button(self.root, text='Cadastros', width=20, bg='gray', command=self.CadastrarProduto).grid(row=1, column=0, padx=10, pady=5)
@@ -416,17 +458,17 @@ class LoginWindow():
             # O primeiro parametro é o título da messagebox e o segundo a mensagem.
             messagebox.showinfo('Login', 'E-mail ou senha invalido')
 
+        # Limpa as campos da janela de login
+        self.password.delete(0, END)
+
         if autenticado:
             self.root.destroy()
             if usuarioMaster:
                 # Chama/Abre a janela de Administrdor após login efetuado com sucesso como Master.
                 AdminWindow()
 
-        # Limpa as campos da janela de login
-        self.login.delete(0, END)
-        self.password.delete(0, END)
-
 # ----------------------------------------------------------------------------------------------------------------------
+    # Função de Cadastro de usuário no DB
     def CadastroBackEnd(self):
         codigoPadrao = '123@h'
 
@@ -469,7 +511,7 @@ class LoginWindow():
             messagebox.showinfo('ERRO', 'Código de segurança incorreto')
 
 # ---------------------------------------------------------------------------------------------------------------------
-    # Mostra o campo Çhave de SEgurança' ao clicar no botão cadastrar na janela de login
+    # Mostra o campo Çhave de Segurança' ao clicar no botão cadastrar na janela de login
     def Cadastro(self):
         Label(self.root, text='Chave de Segurança').grid(row=3, column=0, padx=5, pady=5)
         self.codigoSeguranca = Entry(self.root)
@@ -478,7 +520,7 @@ class LoginWindow():
         Button(self.root, text='Confirmar cadastro', width=15, bg='blue1', command=self.CadastroBackEnd).grid(row=4, column=0, columnspan=3, pady=5, padx=10)
 
 #----------------------------------------------------------------------------------------------------------------------
-    # Recupera
+    # Recupera/exibe todos os usuários cadastrados
     def UpdateBackEnd(self):
         try:
             conexao = pymysql.connect(
@@ -556,7 +598,21 @@ class LoginWindow():
     def __init__(self):
         self.root = Tk()
         self.root.title('Login')
+        self.root.resizable(False, False)   # Desativa a opção/função de alterar tamanho da janela
 
+        # Área de Centralização da janela
+        window_height = 150     # Altura da janela
+        window_width = 210      # Largura da Janela
+
+        screen_width = self.root.winfo_screenwidth()
+        screen_height = self.root.winfo_screenheight()
+
+        x_cordinate = int((screen_width/2) - (window_width/2))
+        y_cordinate = int((screen_height/2) - (window_height/2))
+
+        self.root.geometry("{}x{}+{}+{}".format(window_width, window_height, x_cordinate, y_cordinate))
+        # Fim da Área de Centralizaçào da Janela
+        #---------------------------------------
         # Nomes dos campos
         Label(self.root, text='Faça o login').grid(row=0, column=0, columnspan=2, padx=7)
 
